@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./src/backend/yzkspProject
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./src/backend/yzkspProject:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  frontend:
+    build: ./src/frontend/yzksp-app
+    volumes:
+      - ./src/frontend/yzksp-app:/app
+    ports:
+      - "3000:3000"
+    command: npm start
