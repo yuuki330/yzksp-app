@@ -21,15 +21,6 @@ const EventList = () => {
                     </li>
                 ))}
             </ul>
-            {events.length === 0 ? (
-                <p>イベントがありません。</p>
-            ) : (
-                <ul>
-                    {events.map((event) => (
-                        <li key={event.id}>{event.name} - {new Date(event.date).toLocaleDateString()}</li>
-                    ))}
-                </ul>
-            )}
         </div>
     );
 };
