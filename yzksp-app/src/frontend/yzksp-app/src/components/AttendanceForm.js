@@ -24,18 +24,27 @@ const AttendanceForm = ({ eventId }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h3>出欠登録</h3>
-            <select value={status} oncChange={(e) => setStatus(e.target.value)}>
-                <option value="present">出席</option>
-                <option value="absent">欠席</option>
-                <option value="late">遅刻</option>
-            </select>
-            <button type="submit" disabled={submitting}>
+        <form onSubmit={handleSubmit} className="mt-6">
+            <h3 className="text-xl font-semibold mb-4">出欠登録</h3>
+            <div className="mb-4">
+                <select value={status} 
+                        oncChange={(e) => setStatus(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="present">出席</option>
+                    <option value="absent">欠席</option>
+                    <option value="late">遅刻</option>
+                </select>
+            </div>
+            <button 
+                type="submit" 
+                disabled={submitting}
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50"
+            >
                 {submitting ? '送信中...' : '登録'}
             </button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green'}}>出欠が正常に登録されました。</p>}
+            {error && <p className="mt-2 text-red-500">{error}</p>}
+            {success && <p className="mt-2 text-green-500">出欠が正常に登録されました。</p>}
         </form>
     );
 };

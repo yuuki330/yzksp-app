@@ -24,15 +24,15 @@ const EventDetail = () => {
         fetchEvent();
     }, [id]);
 
-    if (loading) return <div>読み込み中...</div>;
-    if (error) return <div>{error}</div>;
-    if (!error) return <div>イベントが見つかりません。</div>;
+    if (loading) return <div className="text-center py-4">読み込み中...</div>;
+    if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
+    if (!error) return <div className="text-center py-4">イベントが見つかりません。</div>;
 
     return (
-        <div>
-            <h2>{event.name}</h2>
-            <p>日時: {new Date(event.date).toLocaleString()}</p>
-            <p>説明: {event.description}</p>
+        <div className="bg-white shadow-md rouded-lg p-6 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold mb-4">{event.name}</h2>
+            <p className="text-gray-600 mb-2">日時: {new Date(event.date).toLocaleString()}</p>
+            <p className="text-gray-700 mb-4">説明: {event.description}</p>
             <AttendanceForm eventId={event.id} />
         </div>
     );
