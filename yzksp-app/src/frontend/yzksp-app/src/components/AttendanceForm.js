@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
-import apiService from '../services/api';
+import { useAppContext } from '../contexts/AppContext';
 
 const AttendanceForm = ({ eventId }) => {
     const [status, setStatus] = useState('present');
+    const { updateAttendance, error } = useAppContext();
     const [submitting, setSubmitting] = useState(false);
-    const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
-        setError(null);
         setSuccess(false);
 
-        try{
-            await apiService.createAttendance({ event: eventId, status });
+        await updateAttendance({ event: eventId, status });
+
+        setSubmitting(false);
+        if (!error) {
             setSuccess(true);
-            setSubmitting(false);
-        } catch (err) {
-            setError('出欠の登録に失敗しました。');
-            setSubmitting(false);
         }
     };
 

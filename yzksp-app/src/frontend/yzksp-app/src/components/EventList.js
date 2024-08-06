@@ -1,26 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import apiService from '../services/api';
+import { useAppContext } from '../contexts/AppContext';
 
 const EventList = () => {
-    const [events, setEvents] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await apiService.getEvents();
-                setEvents(response.data);
-                setLoading(false);
-            } catch (err) {
-                setError('イベントの取得中にエラーが発生しました。');
-                setLoading(false);
-            }
-        };
-
-        fetchEvents();
-    }, []);
+    const { events, loading, error } = useAppContext();
 
     if (loading) return <div className="text-center py-4">読み込み中...</div>;
     if (error) return <div className="text-center py-4 text-red-500">{error}</div>;

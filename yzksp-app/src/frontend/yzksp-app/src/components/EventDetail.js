@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import apiService from '../services/api';
+import { useAppContext } from '../contexts/AppContext';
 import AttendanceForm from './AttendanceForm';
 
 const EventDetail = () => {
-    const [event, setEvent] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const { id } = useParams();
-
-    useEffect(() => {
-        const fetchEvent = async () => {
-            try {
-                const response = await apiService.getEvent(id);
-                setEvent(response.data);
-                setLoading(false);
-            } catch (err) {
-                setError('イベントの取得に失敗しました。');
-                setLoading(false);
-            }
-        };
-
-        fetchEvent();
-    }, [id]);
+    const { events, loading, error } = useAppContext();
 
     if (loading) return <div className="text-center py-4">読み込み中...</div>;
     if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
+
+    const event = events.find(e => e.id === parseInt(id));
+
     if (!error) return <div className="text-center py-4">イベントが見つかりません。</div>;
 
     return (
