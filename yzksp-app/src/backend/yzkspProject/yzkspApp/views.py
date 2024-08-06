@@ -1,14 +1,15 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from rest_framework import viewsets
+from .models import Event, Participant, Attendance
+from .serializers import EventSerializer, ParticipantSerializer, AttendanceSerializer
 
-# Create your views here.
+class EventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
-@csrf_exempt
-def main_view(request):
-    if request.method == 'POST':
-        return JsonResponse({'message': 'Invalid request method'}) 
+class ParticipantViewSet(viewsets.ModelViewSet):
+    queryset = Participant.objects.all()
+    serializer_class = ParticipantSerializer
 
-def home_view(request):
-    return HttpResponse("Hello World")
+class AttendanceViewSet(viewsets.ModelViewSet):
+    queryset = Attendance.objects.all()
+    serializer_class = AttendanceSerializer

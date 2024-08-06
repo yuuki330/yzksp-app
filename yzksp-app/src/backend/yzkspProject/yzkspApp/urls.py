@@ -1,8 +1,12 @@
-# myapp/urls.py
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import EventViewSet, ParticipantViewSet, AttendanceViewSet
+
+router = DefaultRouter()
+router.register(r'events', EventViewSet)
+router.register(r'participants', ParticipantViewSet)
+router.register(r'attendances', AttendanceViewSet)
 
 urlpatterns = [
-    path('', views.home_view, name='home_view'),
-    path('main_view/', views.main_view, name='main_view'),
+    path('', include(router.urls)),
 ]
