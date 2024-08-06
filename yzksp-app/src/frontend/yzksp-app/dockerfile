@@ -9,16 +9,10 @@ COPY package.json package-lock.json ./
 
 # 依存関係をインストール
 RUN npm install
-RUN npm install axios
 
 # アプリケーションのソースコードをコピー
 COPY . .
 
-# アプリケーションをビルド
-RUN npm run build
+EXPOSE 3000
 
-# 静的ファイルを提供するためにserveをインストール
-RUN npm install -g serve
-
-# アプリケーションを実行
-CMD ["serve", "-s", "build"]
+CMD ["npm", "start"]
