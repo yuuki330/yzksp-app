@@ -8,11 +8,16 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # 依存関係をインストール
-RUN npm install
+RUN npm install && \
+    npm install -D tailwindcss@3.3.3 postcss@8.4.28 autoprefixer@10.4.15 @babel/plugin-proposal-private-property-in-object@7.21.11
 
 # アプリケーションのソースコードをコピー
 COPY . .
 
+# Tailwind CSSの設定ファイルを生成
+RUN npx tailwindcss init -p
+
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# ビルドスクリプトを実行してからアプリケーションを起動
+CMD ["sh", "-c", "npm run build && npm start"]

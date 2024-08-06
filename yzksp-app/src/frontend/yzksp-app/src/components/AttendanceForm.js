@@ -5,7 +5,7 @@ const AttendanceForm = ({ eventId }) => {
     const [status, setStatus] = useState('present');
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const [success, setSucdess] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,7 +32,7 @@ const AttendanceForm = ({ eventId }) => {
                 <option value="late">遅刻</option>
             </select>
             <button type="submit" disabled={submitting}>
-                {submmitting ? '送信中...' : '登録'}
+                {submitting ? '送信中...' : '登録'}
             </button>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green'}}>出欠が正常に登録されました。</p>}
