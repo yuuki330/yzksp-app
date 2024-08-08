@@ -16,10 +16,12 @@ export const AppProvider = ({ children }) => {
     const fetchEvents = async () => {
         try {
             setLoading(true);
+            setError(null);
             const response = await apiService.getEvents();
             setEvents(response.data);
             setLoading(false);
         } catch (err) {
+            console.error('Error fetching evetns:', err);
             setError('イベントの取得に失敗しました。');
             setLoading(false);
         }
@@ -27,21 +29,32 @@ export const AppProvider = ({ children }) => {
 
     const addEvent = async (eventData) => {
         try {
+            setError(null);
             const response = await apiService.createEvent(eventData);
-            setEvents([...events, response.data]);
+            setEvents(prevEvents => [...events, response.data]);
+            return response.data;
         } catch (err) {
+            console.error('Error adding event:', err);
             setError('イベントの追加に失敗しました。');
+            throw err;
         }
     };
 
     const updateAttendance = async (attendanceData) => {
         try {
+            setError(null);
             const response = await apiService.createAttendance(attendanceData);
-            setAttendances([...attendances, response.data]);
+            setAttendances(prevAttendances => [...attendances, response.data]);
+            return response.data;
         } catch (err) {
+            console.error('Error updating attendance:', err);
             setError('出欠の更新に失敗しました');
+            throw err;
         }
     };
+
+    console.log('AppContext events:', events);
+    console.log('AppContext attendances:', attendances);
 
     return (
         <AppContext.Provider
@@ -52,7 +65,8 @@ export const AppProvider = ({ children }) => {
                 error,
                 fetchEvents,
                 addEvent,
-                updateAttendance
+                updateAttendance,
+                setError,
             }}
         >
             {children}

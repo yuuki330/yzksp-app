@@ -1,26 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
+import Button from '../components/Button';
 
 const EventList = () => {
     const { events, loading, error } = useAppContext();
 
     if (loading) return <div className="text-center py-4">読み込み中...</div>;
-    if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
+    if (error) return <div className="text-center py-4 text-secondary">{error}</div>;
 
     return (
-        <div className='container mx-auto px-4'>
-            <h2 className="text-2xl font-bold mb-4">イベント一覧</h2>
-            <ul className="space-y-4">
+        <div>
+            <h2 className="text-3xl font-heading font-bold mb-6">イベント一覧</h2>
+            <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
                 {events.map((event) => (
-                    <li key={event.id} className="bg-white shadow rounded-lg p-4">
-                        <Link to={`/events/${event.id}`} className="text-xl font-semibold text-blue-600 hover:text-blue-800">
-                            {event.name}
-                        </Link>
-                        <p className="text-gray-600">日時: {new Date(event.date).toLocaleString()}</p>
-                    </li>
+                    <div key={event.id} className='bg-white shadow-md rounded-lg overflow-hidden'>
+                        <div className='p-6'>
+                            <h3 className='text-xl font-bold mb-2'>{event.name}</h3>
+                            <p className="text-gray-600 mb-4">日時: {new Date(event.date).toLocaleString()}</p>
+                            <Link to={`/events/${event.id}`}>
+                                <Button variant='outline' size='small'>詳細を見る</Button>
+                            </Link>
+                        </div>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
