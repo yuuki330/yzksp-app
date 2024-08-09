@@ -43,20 +43,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'website',
 ]
 
 SITE_ID = 1
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
-
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-
-LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +61,7 @@ MIDDLEWARE = [
 ]
 
 # CORSの設定
-CORS_ALLOWED_ORIGINS = [
+CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
 ]
 
@@ -150,10 +140,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000',  # ReactアプリのURL
-    'http://127.0.0.1:3000',  # ReactアプリのURL
+# Ensure CSRF settings are configured
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_HTTPONLY = False  # Falseにしてクライアント側でアクセスできるようにする
+CSRF_USE_SESSIONS = False
+# セッションの設定
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = False  # 開発環境ではFalse, 本番環境ではTrueにする
+
+# CSRF設定
+#SESSION_COOKIE_HTTPONLY = True
+#SESSION_COOKIE_SECURE = False  # Set to True in production
+#CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = False  # Set to True in production
+#CSRF_USE_SESSIONS = True
+
+# クロスドメインリクエストを許可するための設定
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # ReactアプリケーションのURL
 ]
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 import os
 
@@ -165,20 +173,10 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        '__main__': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
 }
