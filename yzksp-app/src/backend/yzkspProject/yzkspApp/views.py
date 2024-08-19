@@ -51,7 +51,8 @@ class RegisterView(APIView):
         user.save()
         return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
 
-@csrf_protect
+#@csrf_protect
+@csrf_exempt
 def get_username(request):
     if request.user.is_authenticated:
         print("request.user.username")
