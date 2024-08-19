@@ -63,7 +63,7 @@ MIDDLEWARE = [
 
 # CORSの設定
 CORS_ORIGIN_WHITELIST = [
-    "https://yzksp-react.onrender.com/",
+    "https://yzksp-react.onrender.com",
     "http://localhost:3000",
 ]
 
@@ -160,11 +160,11 @@ CSRF_COOKIE_SECURE = False  # Set to True in production
 # クロスドメインリクエストを許可するための設定
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://yzksp-react.onrender.com/",
+    "https://yzksp-react.onrender.com",
     "http://localhost:3000",  # ReactアプリケーションのURL
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://yzksp-react.onrender.com/",
+CSRF_TRUSTED_ORIGINS = ["https://yzksp-react.onrender.com",
                         'http://localhost:3000']
 
 import os
