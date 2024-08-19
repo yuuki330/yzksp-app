@@ -152,7 +152,7 @@ CSRF_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみで
 SESSION_COOKIE_HTTPONLY = True  # 本番環境ではTrueに設定し、セッションクッキーをJavaScriptからアクセスできないようにする
 SESSION_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでセッションクッキーを送信
 
-# セッションの設定
+SESSION_COOKIE_SAMESITE = 'None'
 
 # CSRF設定
 #CSRF_COOKIE_HTTPONLY = True
@@ -188,3 +188,9 @@ LOGGING = {
         },
     },
 }
+
+#ログイン
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
