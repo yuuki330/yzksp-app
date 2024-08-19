@@ -148,7 +148,9 @@ CSRF_COOKIE_HTTPONLY = False  # Falseにしてクライアント側でアクセ�
 CSRF_USE_SESSIONS = False
 # セッションの設定
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False  # 開発環境ではFalse, 本番環境ではTrueにする
+
+#SESSION_COOKIE_SECURE = False  # 開発環境ではFalse, 本番環境ではTrueにする
+SESSION_COOKIE_SECURE = True  # 開発環境ではFalse, 本番環境ではTrueにする
 
 # CSRF設定
 #SESSION_COOKIE_HTTPONLY = True
