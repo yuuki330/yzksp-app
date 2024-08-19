@@ -28,6 +28,20 @@ const MainView = () => {
         fetchUsername();
     }, []);
 
+    const fetchUsername2 = async () => {
+        const csrfToken = Cookies.get('csrftoken');
+        try {
+            const response = await axios.post(`${API_URL}/get-username/`, {}, {
+                headers: { 'X-CSRFToken': csrfToken },
+                withCredentials: true
+            });
+            setUsername(response.data.username);
+        } catch (error) {
+            setMessage('User not logged in');
+            console.error('Error fetching username:', error);
+        }
+    };
+
     return (
         <div>
             {username ? (
@@ -38,6 +52,7 @@ const MainView = () => {
             ) : (
                 <h1>Welcome, Guest!</h1>
             )}
+            <button onClick={fetchUsername2}>Fetch Username</button> {/* ボタンを追加 */}
             {message && <p>{message}</p>}
         </div>
     );
