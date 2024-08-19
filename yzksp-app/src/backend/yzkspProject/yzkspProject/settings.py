@@ -61,11 +61,11 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-# # CORSの設定
-# CORS_ORIGIN_WHITELIST = [
-#     "https://yzksp-react.onrender.com",
-#     "http://localhost:3000",
-# ]
+# CORSの設定
+CORS_ORIGIN_WHITELIST = [
+    "https://yzksp-react.onrender.com",
+    "http://localhost:3000",
+]
 
 ROOT_URLCONF = 'yzkspProject.urls'
 
