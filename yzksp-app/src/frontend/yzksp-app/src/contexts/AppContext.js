@@ -5,7 +5,6 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [events, setEvents] = useState([]);
-    const [attendances, setAttendances] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -64,11 +63,9 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const updateAttendance = async (attendanceData) => {
+    const createAttendance = async (attendanceData) => {
         try {
-            setError(null);
             const response = await apiService.createAttendance(attendanceData);
-            setAttendances(prevAttendances => [...attendances, response.data]);
             return response.data;
         } catch (err) {
             console.error('Error updating attendance:', err);
@@ -76,9 +73,6 @@ export const AppProvider = ({ children }) => {
             throw err;
         }
     };
-
-    console.log('AppContext events:', events);
-    console.log('AppContext attendances:', attendances);
 
     const deleteEvent = async (id) => {
         try {
@@ -96,14 +90,13 @@ export const AppProvider = ({ children }) => {
         <AppContext.Provider
             value={{
                 events,
-                attendances,
                 loading,
                 error,
                 fetchEvents,
                 addEvent,
                 updateEvent,
                 deleteEvent,
-                updateAttendance,
+                createAttendance,
                 setError,
             }}
         >

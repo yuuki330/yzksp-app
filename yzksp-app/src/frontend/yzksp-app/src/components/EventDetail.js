@@ -28,13 +28,13 @@ const EventDetail = () => {
     };
 
     return (
-        <div className="bg-white shadow-md rouded-lg p-6 overflow-hidden">
+        <div className="bg-white shadow-md rounded-lg p-6 overflow-hidden">
             <div className='p-6 md:p-8 lg:p-10'>
                 <h2 className="text-2xl md:text-3xl font-heading font-bold mb-4">{event.name}</h2>
                 <div className='md:flex md:justify-between md:items-start'>
                     <div className="mb-6 md:mb-0 md:w-2/3">
                         <p className="text-gray-600 mb-2">日時: {new Date(event.date).toLocaleString()}</p>
-                        <p className="text-gray-700">説明: {event.description}</p>
+                        <p className="text-gray-700 mb-4">説明: {event.description}</p>
                     </div>
                     <div className='md:w-1/3 md:ml-8'>
                         <AttendanceForm eventId={event.id} />

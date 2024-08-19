@@ -15,4 +15,11 @@ class ParticipantSerializer(serializers.ModelSerializer):
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = ['id', 'event', 'participant', 'status', 'timestamp']
+        fields = ['id', 'event', 'status']
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        # TemporaryAuthentication によって提供されるユーザーを使用
+        participant = Participant.objects.get(user=request.user)
+        validated_data['participant'] = participant
+        return super().create(validated_data)

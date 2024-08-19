@@ -25,3 +25,12 @@ class ParticipantViewSet(viewsets.ModelViewSet):
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
+
+    def create(self, request, *args, **kwargs):
+        print("Received data for attendance creation:", request.data)
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print("Validation errors:", serializer.errors)
+        return Response({"detail": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
