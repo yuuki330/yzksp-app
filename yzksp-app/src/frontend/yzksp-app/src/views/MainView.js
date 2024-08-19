@@ -18,6 +18,7 @@ const MainView = () => {
                     headers: { 'X-CSRFToken': csrfToken },
                     withCredentials: true
                 });
+                console.log("response.data.username", response.data.username);
                 setUsername(response.data.username);
             } catch (error) {
                 setMessage('User not logged in');
@@ -35,6 +36,7 @@ const MainView = () => {
                 headers: { 'X-CSRFToken': csrfToken },
                 withCredentials: true
             });
+            console.log("response.data.username", response.data.username);
             setUsername(response.data.username);
         } catch (error) {
             setMessage('User not logged in');
