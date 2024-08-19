@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-pdl0opogr#*nv%20697f_z&f^xy74z9s21!j@y)w+i)&a7in$w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost',
+ALLOWED_HOSTS = ['yzksp-django.onrender.com', 
+                 'localhost',
                  '127.0.0.1']
 
 # Application definition
@@ -62,6 +63,7 @@ MIDDLEWARE = [
 
 # CORSの設定
 CORS_ORIGIN_WHITELIST = [
+    "https://yzksp-react.onrender.com/",
     "http://localhost:3000",
 ]
 
@@ -158,10 +160,12 @@ CSRF_COOKIE_SECURE = False  # Set to True in production
 # クロスドメインリクエストを許可するための設定
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
+    "https://yzksp-react.onrender.com/",
     "http://localhost:3000",  # ReactアプリケーションのURL
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ["https://yzksp-react.onrender.com/",
+                        'http://localhost:3000']
 
 import os
 
