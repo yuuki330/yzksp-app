@@ -55,7 +55,5 @@ class RegisterView(APIView):
 @csrf_exempt
 def get_username(request):
     if request.user.is_authenticated:
-        print("request.user.username")
-        print(request.user.username)
-        #return JsonResponse({"username": request.user.username})
-    return JsonResponse({"username": "ユーザ not logged in"})
+        return JsonResponse({"username": request.user.username})
+    return JsonResponse({"username": "ユーザはログインしていません。"})
