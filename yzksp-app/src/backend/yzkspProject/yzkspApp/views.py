@@ -18,6 +18,10 @@ class CustomLoginView(APIView):
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
         password = request.data.get('password')
+
+        print(f"username:{username}")
+        print(f"password:{password}")
+
         user = authenticate(username=username, password=password)
 
         if user is not None:
