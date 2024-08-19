@@ -144,20 +144,22 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Ensure CSRF settings are configured
 CSRF_COOKIE_NAME = "csrftoken"
-CSRF_COOKIE_HTTPONLY = False  # Falseにしてクライアント側でアクセスできるようにする
+CSRF_COOKIE_HTTPONLY = True  # 本番環境ではTrueに設定して、CSRFトークンをJavaScriptから読み取れないようにする
 CSRF_USE_SESSIONS = False
-# セッションの設定
-SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでCSRFクッキーを送信
 
-#SESSION_COOKIE_SECURE = False  # 開発環境ではFalse, 本番環境ではTrueにする
-SESSION_COOKIE_SECURE = True  # 開発環境ではFalse, 本番環境ではTrueにする
+# セッションの設定
+SESSION_COOKIE_HTTPONLY = True  # 本番環境ではTrueに設定し、セッションクッキーをJavaScriptからアクセスできないようにする
+SESSION_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでセッションクッキーを送信
+
+# セッションの設定
 
 # CSRF設定
-#SESSION_COOKIE_HTTPONLY = True
-#SESSION_COOKIE_SECURE = False  # Set to True in production
 #CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = False  # Set to True in production
+#CSRF_COOKIE_SECURE = False
 #CSRF_USE_SESSIONS = True
+#SESSION_COOKIE_HTTPONLY = True
+#SESSION_COOKIE_SECURE = False
 
 # クロスドメインリクエストを許可するための設定
 CORS_ALLOW_CREDENTIALS = True
