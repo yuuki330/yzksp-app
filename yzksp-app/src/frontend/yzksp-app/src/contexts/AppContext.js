@@ -30,12 +30,36 @@ export const AppProvider = ({ children }) => {
     const addEvent = async (eventData) => {
         try {
             setError(null);
+            console.log('Adding event with data:', eventData);
             const response = await apiService.createEvent(eventData);
+            console.log('Add event response:', response.data);
             setEvents(prevEvents => [...events, response.data]);
             return response.data;
         } catch (err) {
             console.error('Error adding event:', err);
+            if (err.response) {
+                console.error('Error response:', err.response.data);
+            }
             setError('イベントの追加に失敗しました。');
+            throw err;
+        }
+    };
+
+    const updateEvent = async (id, eventData) => {
+        try{
+            console.log('Updating event with id:', id, 'and data:', eventData);
+            const { organizer, ...dataToSend } = eventData;
+            const response = await apiService.updateEvent(id, dataToSend);
+            console.log('Update response:', response);
+
+            setEvents(prevEvents => prevEvents.map(event =>
+                event.id === id ? response.data : event
+            ));
+            
+            return response.data;
+        } catch (err) {
+            console.error('Error updating event:', err);
+            setError('イベントの更新に失敗しました。');
             throw err;
         }
     };
@@ -56,6 +80,18 @@ export const AppProvider = ({ children }) => {
     console.log('AppContext events:', events);
     console.log('AppContext attendances:', attendances);
 
+    const deleteEvent = async (id) => {
+        try {
+            setError(null);
+            await apiService.deleteEvent(id);
+            setEvents(prevEvents => prevEvents.filter(event => event.id !== id));
+        } catch (err) {
+            console.error('Error deleting event:', err);
+            setError('イベントの削除に失敗しました。');
+            throw err;
+        }
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -65,6 +101,8 @@ export const AppProvider = ({ children }) => {
                 error,
                 fetchEvents,
                 addEvent,
+                updateEvent,
+                deleteEvent,
                 updateAttendance,
                 setError,
             }}

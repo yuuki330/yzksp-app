@@ -5,6 +5,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id', 'name', 'date', 'description', 'organizer']
+        extra_kwargs = {'organizer': {'required': False}}
 
 class ParticipantSerializer(serializers.ModelSerializer):
     class Meta:

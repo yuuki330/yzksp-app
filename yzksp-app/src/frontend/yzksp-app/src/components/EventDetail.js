@@ -1,20 +1,31 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
 import AttendanceForm from './AttendanceForm';
 import Button from '../components/Button';
 
 const EventDetail = () => {
     const { id } = useParams();
-    const { events, loading, error } = useAppContext();
+    const navigate = useNavigate();
+    const { events, loading, error, deleteEvent } = useAppContext();
     
-
     if (loading) return <div className="text-center py-4">読み込み中...</div>;
     if (error) return <div className="text-center py-4 text-secondary">{error}</div>;
 
     const event = events.find(e => e.id === parseInt(id));
 
     if (!event) return <div className="text-center py-4">イベントが見つかりません。</div>;
+
+    const handleDelete = async () => {
+        if (window.confirm('このイベントを削除してもよろしいですか？')) {
+            try {
+                await deleteEvent(event.id);
+                navigate('/events');
+            } catch (err) {
+                console.error('Failed to delete event:', err);
+            }
+        }
+    };
 
     return (
         <div className="bg-white shadow-md rouded-lg p-6 overflow-hidden">
@@ -29,9 +40,11 @@ const EventDetail = () => {
                         <AttendanceForm eventId={event.id} />
                     </div>
                 </div>
-                <div className="mt-8">
-                    <Button variant='secondary' onClick={() => window.history.back()}>戻る</Button>
-                </div>
+            </div>
+            <div className="mt-8 space-x-4">
+                <Button variant='secondary' onClick={() => navigate('/events')}>戻る</Button>
+                <Button onClick={() => navigate(`/events/${id}/edit`)}>編集</Button>
+                <Button variant='danger' onClick={handleDelete}>削除</Button>
             </div>
         </div>
     );

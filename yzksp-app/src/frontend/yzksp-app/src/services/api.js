@@ -6,7 +6,10 @@ const apiService = {
     getEvents: () => axios.get(`${API_URL}events/`),
     getEvent: (id) => axios.get(`${API_URL}events/${id}/`),
     createEvent: (data) => axios.post(`${API_URL}events/`, data),
-    updateEvent: (id, data) => axios.put(`${API_URL}events/${id}/`),
+    updateEvent: (id, data) => {
+        console.log('Sending update request for event:', id, 'with data:', data);  // デバッグ用ログ
+        return axios.put(`${API_URL}events/${id}/`, data);
+    },
     deleteEvent: (id) => axios.delete(`${API_URL}events/${id}/`),
 
     getParticipants: () => axios.get(`${API_URL}participants/`),
