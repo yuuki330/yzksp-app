@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-pdl0opogr#*nv%20697f_z&f^xy74z9s21!j@y)w+i)&a7in$w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost',
+ALLOWED_HOSTS = ['yzksp-django.onrender.com', 
+                 'localhost',
                  '127.0.0.1']
 
 # Application definition
@@ -40,7 +41,14 @@ INSTALLED_APPS = [
     'yzkspApp',
     'corsheaders',
     'rest_framework',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'website',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,10 +59,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 # CORSの設定
-CORS_ALLOWED_ORIGINS = [
+CORS_ORIGIN_WHITELIST = [
+    "https://yzksp-react.onrender.com",
     "http://localhost:3000",
 ]
 
@@ -139,3 +149,57 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Ensure CSRF settings are configured
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_HTTPONLY = True  # 本番環境ではTrueに設定して、CSRFトークンをJavaScriptから読み取れないようにする
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでCSRFクッキーを送信
+
+# セッションの設定
+SESSION_COOKIE_HTTPONLY = True  # 本番環境ではTrueに設定し、セッションクッキーをJavaScriptからアクセスできないようにする
+SESSION_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでセッションクッキーを送信
+
+SESSION_COOKIE_SAMESITE = 'None'
+
+# CSRF設定
+#CSRF_COOKIE_HTTPONLY = True
+#CSRF_COOKIE_SECURE = False
+#CSRF_USE_SESSIONS = True
+#SESSION_COOKIE_HTTPONLY = True
+#SESSION_COOKIE_SECURE = False
+
+# クロスドメインリクエストを許可するための設定
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://yzksp-react.onrender.com",
+    "http://localhost:3000",  # ReactアプリケーションのURL
+]
+
+CSRF_TRUSTED_ORIGINS = ["https://yzksp-react.onrender.com",
+                        'http://localhost:3000']
+
+import os
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
+#ログイン
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
