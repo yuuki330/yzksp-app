@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
-const API_URL = process.env.REACT_APP_API_URL;
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext'; // パスは適宜調整してください
 
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const { register } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`${API_URL}/register/`, { username, email, password });
-      setMessage(response.data.message);
+      await register(username, email, password);
+      setMessage('Registration successful');
+      navigate('/login');
     } catch (error) {
-      setMessage('Registration failed');
+      setMessage('Registration failed: ' + (error.response?.data?.message || error.message));
     }
   };
 

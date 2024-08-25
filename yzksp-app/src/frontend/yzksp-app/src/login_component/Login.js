@@ -1,33 +1,21 @@
-// loging.js
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-
-const API_URL = process.env.REACT_APP_API_URL;
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const csrfToken = Cookies.get('csrftoken');
-            const response = await axios.post(`${API_URL}/login/`, 
-                { username, password },
-                {
-                    headers: { 'X-CSRFToken': csrfToken },
-                    withCredentials: true
-                }
-            );
-            if (response.status === 200) {
-                navigate('/');
-            }
+            await login(username, password);
+            navigate('/');
         } catch (error) {
-            setMessage('Login failed');
+            setMessage('Login failed: ' + (error.response?.data?.message || error.message));
         }
     };
 

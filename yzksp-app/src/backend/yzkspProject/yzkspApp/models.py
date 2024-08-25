@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 class Event(models.Model):
     name = models.CharField(max_length=200)
@@ -10,9 +11,18 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+class ParticipantManager(models.Manager):
+    def get_or_create_for_user(self, user):
+        try:
+            return self.get(user=user)
+        except Participant.DoesNotExist:
+            return self.create(user=user)
+
 class Participant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15, blank=True)
+
+    objects = ParticipantManager()
 
     def __str__(self):
         return self.user.username
@@ -34,3 +44,11 @@ class Attendance(models.Model):
     
     def __str__(self):
         return f"{self.participant} - {self.event} - {self.status}"
+
+    def clean(self):
+        if self.status not in dict(self.ATTENDANCE_CHOICES):
+            raise ValidationError({'status': 'Invalid attendance status'})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)

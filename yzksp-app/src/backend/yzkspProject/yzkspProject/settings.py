@@ -62,12 +62,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-# CORSの設定
-CORS_ORIGIN_WHITELIST = [
-    "https://yzksp-react.onrender.com",
-    "http://localhost:3000",
-]
-
 ROOT_URLCONF = 'yzkspProject.urls'
 
 TEMPLATES = [
@@ -143,17 +137,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'yzkspApp.authentication.TemporaryAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Ensure CSRF settings are configured
 CSRF_COOKIE_NAME = "csrftoken"
-CSRF_COOKIE_HTTPONLY = True  # 本番環境ではTrueに設定して、CSRFトークンをJavaScriptから読み取れないようにする
+CSRF_COOKIE_HTTPONLY = False  # 本番環境ではTrueに設定して、CSRFトークンをJavaScriptから読み取れないようにする
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでCSRFクッキーを送信
 
@@ -170,6 +166,12 @@ SESSION_COOKIE_SAMESITE = 'None'
 #SESSION_COOKIE_HTTPONLY = True
 #SESSION_COOKIE_SECURE = False
 
+# CORSの設定
+CORS_ORIGIN_WHITELIST = [
+    "https://yzksp-react.onrender.com",
+    "http://localhost:3000",
+]
+
 # クロスドメインリクエストを許可するための設定
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
@@ -179,6 +181,27 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = ["https://yzksp-react.onrender.com",
                         'http://localhost:3000']
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 import os
 

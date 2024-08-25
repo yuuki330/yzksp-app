@@ -16,11 +16,12 @@ const AttendanceForm = ({ eventId }) => {
         setSuccess(false);
     
         try {
-            await createAttendance({ event: eventId, status });
+            console.log('Submitting attendance for event:', eventId, 'with status:', status);
+            await createAttendance(eventId, { status });
             setSuccess(true);
         } catch (err) {
             console.error('Error updating attendance:', err);
-            setError('出欠の登録に失敗しました。もう一度お試しください。')
+            setError(err.message || '出欠の登録に失敗しました。もう一度お試しください。');
         } finally {
             setSubmitting(false);
         }
