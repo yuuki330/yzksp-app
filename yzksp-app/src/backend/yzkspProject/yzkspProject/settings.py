@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pdl0opogr#*nv%20697f_z&f^xy74z9s21!j@y)w+i)&a7in$w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['yzksp-django.onrender.com', 
                  'localhost',
@@ -152,8 +153,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
-CSRF_COOKIE_SECURE = False  # 開発環境ではFalse、本番環境ではTrueに設定
-SESSION_COOKIE_SECURE = False  # 開発環境ではFalse、本番環境ではTrueに設定
+CSRF_COOKIE_SECURE = not DEBUG  # 開発環境ではFalse、本番環境ではTrueに設定
+SESSION_COOKIE_SECURE = not DEBUG  # 開発環境ではFalse、本番環境ではTrueに設定
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 
