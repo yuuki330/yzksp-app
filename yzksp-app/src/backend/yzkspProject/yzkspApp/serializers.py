@@ -23,6 +23,7 @@ class EventSerializer(serializers.ModelSerializer):
 class AttendanceSerializer(serializers.ModelSerializer):
     event_id = serializers.IntegerField(write_only=True)
     user_id = serializers.IntegerField(write_only=True, required=False)
+    status = serializers.CharField(required=True)  # status フィールドを必須に設定
 
     class Meta:
         model = Attendance
@@ -34,23 +35,24 @@ class AttendanceSerializer(serializers.ModelSerializer):
         if not request or not request.user.is_authenticated:
             raise serializers.ValidationError("認証されていないユーザーです。")
 
-        event_id = validated_data.pop('event_id')
+        event_id = validated_data.get('event_id')
+        if not event_id:
+            raise serializers.ValidationError("event_id は必須フィールドです。")
+
         try:
             event = Event.objects.get(id=event_id)
         except Event.DoesNotExist:
             raise serializers.ValidationError("指定されたイベントが見つかりません。")
 
-        # user_idが提供されていない場合は、認証されたユーザーを使用
-        user_id = validated_data.pop('user_id', None)
-        user = User.objects.get(id=user_id) if user_id else request.user
-
+        user = request.user
         participant, _ = Participant.objects.get_or_create(user=user)
 
-        attendance, _ = Attendance.objects.update_or_create(
+        attendance, created = Attendance.objects.update_or_create(
             event=event,
             participant=participant,
             defaults={'status': validated_data.get('status')}
         )
+
         return attendance
 
     def to_representation(self, instance):
@@ -59,8 +61,8 @@ class AttendanceSerializer(serializers.ModelSerializer):
             'id': instance.event.id,
             'name': instance.event.name
         }
-        representation['participant'] = {
-            'id': instance.participant.id,
+        representation['user'] = {
+            'id': instance.participant.user.id,
             'username': instance.participant.user.username
         }
         return representation

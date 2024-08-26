@@ -135,6 +135,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# 変更: REST Framework設定
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -147,40 +148,28 @@ REST_FRAMEWORK = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-# Ensure CSRF settings are configured
+# 変更: CSRF設定
 CSRF_COOKIE_NAME = "csrftoken"
-CSRF_COOKIE_HTTPONLY = False  # 本番環境ではTrueに設定して、CSRFトークンをJavaScriptから読み取れないようにする
+CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
-CSRF_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでCSRFクッキーを送信
+CSRF_COOKIE_SECURE = False  # 開発環境ではFalse、本番環境ではTrueに設定
+SESSION_COOKIE_SECURE = False  # 開発環境ではFalse、本番環境ではTrueに設定
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 
-# セッションの設定
-SESSION_COOKIE_HTTPONLY = True  # 本番環境ではTrueに設定し、セッションクッキーをJavaScriptからアクセスできないようにする
-SESSION_COOKIE_SECURE = True  # 本番環境ではTrueに設定し、HTTPSのみでセッションクッキーを送信
-
-SESSION_COOKIE_SAMESITE = 'None'
-
-# CSRF設定
-#CSRF_COOKIE_HTTPONLY = True
-#CSRF_COOKIE_SECURE = False
-#CSRF_USE_SESSIONS = True
-#SESSION_COOKIE_HTTPONLY = True
-#SESSION_COOKIE_SECURE = False
-
-# CORSの設定
-CORS_ORIGIN_WHITELIST = [
-    "https://yzksp-react.onrender.com",
-    "http://localhost:3000",
-]
-
-# クロスドメインリクエストを許可するための設定
+# 変更: CORS設定
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
     "https://yzksp-react.onrender.com",
-    "http://localhost:3000",  # ReactアプリケーションのURL
 ]
+CORS_ALLOW_ALL_ORIGINS = False  # 特定のオリジンのみを許可する
 
-CSRF_TRUSTED_ORIGINS = ["https://yzksp-react.onrender.com",
-                        'http://localhost:3000']
+# 変更: CSRF信頼済みオリジン
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "https://yzksp-react.onrender.com",
+]
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -203,8 +192,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-import os
-
+# 変更: ロギング設定
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -212,16 +200,32 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'django.auth': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'django.security.csrf': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
         },
     },
 }
 
-#ログイン
+# ログイン設定
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',

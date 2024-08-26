@@ -13,10 +13,8 @@ class Event(models.Model):
 
 class ParticipantManager(models.Manager):
     def get_or_create_for_user(self, user):
-        try:
-            return self.get(user=user)
-        except Participant.DoesNotExist:
-            return self.create(user=user)
+        participant, created = self.get_or_create(user=user)
+        return participant, created
 
 class Participant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
