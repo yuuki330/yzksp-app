@@ -30,7 +30,7 @@ class CustomLoginView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
 
-        logger.debug(f"Login attempt for username: {username}")
+        logger.info(f"Login attempt for username: {username}")
 
         user = authenticate(username=username, password=password)
 
@@ -56,10 +56,7 @@ class CustomLogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        logger.debug(f"CSRF token in request: {request.META.get('HTTP_X_CSRFTOKEN')}")
-        logger.debug(f"Session ID: {request.session.session_key}")
-        logger.debug(f"User attempting to logout: {request.user.username}")
-        
+        logger.info(f"Logout attempt for user: {request.user.username}")
         logout(request)
         response = Response({"message": "Logout successful"}, status=status.HTTP_200_OK)
         response.delete_cookie('sessionid')
@@ -89,6 +86,7 @@ class RegisterView(APIView):
         Participant.objects.create(user=user)
         return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
 
+@permission_classes([IsAuthenticated])
 @ensure_csrf_cookie
 def get_username(request):
     logger.debug(f"get_username called for user: {request.user}")
@@ -99,21 +97,23 @@ def get_username(request):
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = [IsAuthenticated]
 
     def update(self, request, *args, **kwargs):
-        logger.debug(f"Received data for update: {request.data}")
+        logger.info(f"Update attempt for event: {kwargs.get('pk')}")
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         if serializer.is_valid():
             self.perform_update(serializer)
             return Response(serializer.data)
-        logger.error(f"Validation errors: {serializer.errors}")
+        logger.warning(f"Validation errors in event update: {serializer.errors}")
         return Response({"detail": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer
+    permission_classes = [IsAuthenticated]
 
 class AttendanceViewSet(viewsets.ModelViewSet):
     serializer_class = AttendanceSerializer
@@ -126,22 +126,21 @@ class AttendanceViewSet(viewsets.ModelViewSet):
         return Attendance.objects.all().select_related('participant__user', 'event')
 
     def create(self, request, *args, **kwargs):
-        logger.debug(f"Current user: {request.user.username}")
-        logger.debug(f"Request data: {request.data}")
-        
+        logger.info(f"Attendance creation attempt for user: {request.user.username}")
+
         mutable_data = request.data.copy()
         mutable_data['event_id'] = self.kwargs.get('event_pk')
-        
+
         participant, created = Participant.objects.get_or_create(user=request.user)
         mutable_data['participant_id'] = participant.id
 
         serializer = self.get_serializer(data=mutable_data, context={'request': request})
-        
+
         if serializer.is_valid():
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            logger.error(f"Serializer errors: {serializer.errors}")
+            logger.warning(f"Validation errors in attendance creation: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])

@@ -197,31 +197,34 @@ CORS_ALLOW_HEADERS = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
         'file': {
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
+            'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
-        'django.request': {
+        'yzkspApp': {  # あなたのアプリケーション名に変更してください
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-        },
-        'django.auth': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-        },
-        'django.security.csrf': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'propagate': False,
         },
     },
 }
