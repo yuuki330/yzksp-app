@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 # 依存関係をインストール
 RUN npm install && \
     npm install -D tailwindcss@3.3.3 postcss@8.4.28 autoprefixer@10.4.15 @babel/plugin-proposal-private-property-in-object@7.21.11 && \
-    npm install js-cookie
+    npm install js-cookie react-big-calendar moment
 
 # アプリケーションのソースコードをコピー
 COPY . .

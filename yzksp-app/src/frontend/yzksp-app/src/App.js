@@ -13,6 +13,7 @@ import CreateEventPage from './pages/CreateEventPage';
 import UpdateEventPage from './pages/UpdateEventPage';
 import Login from './login_component/Login';
 import Register from './login_component/Register';
+import CalendarView from './components/CalendarView';
 
 function Navigation() {
   const { user, logout } = useAuth();
@@ -58,24 +59,24 @@ function AppContent() {
   const { user } = useAuth();
 
   useEffect(() => {
-    console.log('AppContent: user state changed', user);
+      console.log('AppContent: user state changed', user);
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navigation />
-      <main className="container mx-auto px-6 py-8">
-        <Routes>
-          <Route path="/" element={<h1 className="text-3xl font-bold text-gray-800 mb-4">出欠管理アプリへようこそ</h1>} />
-          <Route path="/events" element={<EventList />} />
-          <Route path="/events/create" element={<CreateEventPage />} />
-          <Route path="/events/:id" element={<EventDetail />} />
-          <Route path="/events/:id/edit" element={<UpdateEventPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </main>
-    </div>
+      <div className="min-h-screen bg-gray-100">
+          <Navigation />
+          <main className="container mx-auto px-6 py-8">
+              <Routes>
+                  <Route path="/" element={<CalendarView />} />
+                  <Route path="/events" element={<EventList />} />
+                  <Route path="/events/create" element={<CreateEventPage />} />
+                  <Route path="/events/:id" element={<EventDetail />} />
+                  <Route path="/events/:id/edit" element={<UpdateEventPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+              </Routes>
+          </main>
+      </div>
   );
 }
 

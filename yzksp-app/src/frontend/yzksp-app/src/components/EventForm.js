@@ -6,6 +6,7 @@ const EventForm = ({ event, onSubmit }) => {
     const [name, setName] = useState(event ? event.name : '');
     const [date, setDate] = useState(event ? event.date.slice(0, 16) : '');
     const [description, setDescription] = useState(event ? event.description : '');
+    const [eventType, setEventType] = useState(event ? event.eventType : 'regular');
     const [errors, setErrors] = useState({});
     const { addEvent, updateEvent } = useAppContext();
 
@@ -21,7 +22,7 @@ const EventForm = ({ event, onSubmit }) => {
         let tempErrors = {};
         if (!name.trim()) tempErrors.name = "イベント名は必須です。";
         if (!date) tempErrors.date = "日時は必須です。";
-        if (new Date(date) < new Date()) tempErrors.date = "過去の日付は選択できません。";
+        if (!eventType) tempErrors.eventType = "イベントタイプは必須です。";
         if (description.length > 500) tempErrors.description = "説明は500文字以内で入力してください。";
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
@@ -31,7 +32,7 @@ const EventForm = ({ event, onSubmit }) => {
         e.preventDefault();
         if (!validateForm()) return;
 
-        const eventData = { name, date, description };
+        const eventData = { name, date, description, eventType };
         console.log('Submitting event data:', eventData);
 
         try {
@@ -81,6 +82,21 @@ const EventForm = ({ event, onSubmit }) => {
                     className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${errors.description ? 'border-red-500' : ''}`}
                 ></textarea>
                 {errors.description && <p className="mt-2 text-sm text-red-600">{errors.description}</p>}
+            </div>
+            <div>
+                <label htmlFor="eventType" className="block text-sm font-medium text-gray-700">イベントタイプ</label>
+                <select
+                    id="eventType"
+                    value={eventType}
+                    onChange={(e) => setEventType(e.target.value)}
+                    className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${errors.eventType ? 'border-red-500' : ''}`}
+                >
+                    <option value="regular">放課後練習</option>
+                    <option value="weekend">休日練習</option>
+                    <option value="competition">大会</option>
+                    <option value="other">その他</option>
+                </select>
+                {errors.eventType && <p className="mt-2 text-sm text-red-600">{errors.eventType}</p>}
             </div>
             <Button type="submit">{event ? '更新' : '作成'}</Button>
             {errors.submit && <p className="mt-2 text-sm text-red-600">{errors.submit}</p>}

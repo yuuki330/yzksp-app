@@ -18,7 +18,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ['id', 'name', 'date', 'description']
+        fields = ['id', 'name', 'date', 'description', 'eventType']
 
 class AttendanceSerializer(serializers.ModelSerializer):
     event_id = serializers.IntegerField(write_only=True)

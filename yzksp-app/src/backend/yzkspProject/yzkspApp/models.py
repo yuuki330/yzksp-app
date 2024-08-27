@@ -7,6 +7,13 @@ class Event(models.Model):
     date = models.DateTimeField()
     description = models.TextField(blank=True)
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organized_events', null=True, blank=True)
+    EVENT_TYPES = [
+        ('regular', '放課後練習'),
+        ('weekend', '休日練習'),
+        ('competition', '大会'),
+        ('other', 'その他'),
+    ]
+    eventType = models.CharField(max_length=20, choices=EVENT_TYPES, default='regular')
 
     def __str__(self):
         return self.name
