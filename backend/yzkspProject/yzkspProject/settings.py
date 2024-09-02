@@ -26,9 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-pdl0opogr#*nv%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['yzksp-django.onrender.com', 
-                 'localhost',
-                 '127.0.0.1']
+ALLOWED_HOSTS = ['yzksp-django.onrender.com', 'yzksp-app.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
