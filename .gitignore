@@ -1,4 +1,7 @@
-yzksp-app/src/backend/yzkspProject/yzkspApp/__pycache__/
-yzksp-app/src/backend/yzkspProject/yzkspApp/migrations/__pycache__/
-yzksp-app/src/backend/yzkspProject/yzkspProject/__pycache__/
-yzksp-app/src/backend/yzkspProject/debug.log
+yzksp-app/backend/yzkspProject/yzkspApp/__pycache__/
+yzksp-app/backend/yzkspProject/yzkspApp/migrations/__pycache__/
+yzksp-app/backend/yzkspProject/yzkspProject/__pycache__/
+yzksp-app/backend/yzkspProject/debug.log
+yzksp-app/backend/yzkspProject/yzkspApp/__init__.py
+yzksp-app/backend/yzkspProject/yzkspApp/migrations/__init__.py
+yzksp-app/backend/yzkspProject/yzkspProject/__init__.py
