@@ -3,3 +3,5 @@ djangorestframework
 django-cors-headers
 django-allauth
 website
+gunicorn
+psycopg2-binary
