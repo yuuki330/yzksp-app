@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.utils.decorators import method_decorator
@@ -22,7 +22,9 @@ logger = logging.getLogger(__name__)
 def main_view(request):
     if request.method == 'POST':
         return JsonResponse({'message': 'Invalid request method'})
+    return JsonResponse({'message': 'Welcome to the API'})
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CustomLoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -46,12 +48,12 @@ class CustomLoginView(APIView):
                 },
                 "csrf_token": csrf_token
             }, status=status.HTTP_200_OK)
-            response.set_cookie('csrftoken', csrf_token, httponly=False, samesite='Lax')
+            response.set_cookie('csrftoken', csrf_token, httponly=False, samesite='None', secure=True)
             return response
         logger.warning(f"Failed login attempt for username: {username}")
         return Response({"message": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class CustomLogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -63,9 +65,9 @@ class CustomLogoutView(APIView):
         response.delete_cookie('csrftoken')
         return response
 
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
     permission_classes = [AllowAny]
-    authentication_classes = []  # 認証をバイパス
     
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -86,13 +88,14 @@ class RegisterView(APIView):
         Participant.objects.create(user=user)
         return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
 
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @ensure_csrf_cookie
 def get_username(request):
     logger.debug(f"get_username called for user: {request.user}")
     if request.user.is_authenticated:
         return JsonResponse({"username": request.user.username})
-    return JsonResponse({"username": "ユーザはログインしていません。"})
+    return JsonResponse({"username": "ユーザはログインしていません。"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
