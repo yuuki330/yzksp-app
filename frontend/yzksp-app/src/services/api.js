@@ -14,7 +14,7 @@ axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(function (config) {
     config.headers['X-CSRFToken'] = getCSRFToken();
-    console.log('Request URL:', config.url);  // デバッグ用
+    console.log('Full Request URL:', config.baseURL + config.url); // デバッグ用
     return config;
 });
 

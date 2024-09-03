@@ -154,23 +154,23 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
-CSRF_COOKIE_SECURE = not DEBUG  # 開発環境ではFalse、本番環境ではTrueに設定
-SESSION_COOKIE_SECURE = not DEBUG  # 開発環境ではFalse、本番環境ではTrueに設定
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = True  # 開発環境ではFalse、本番環境ではTrueに設定
+SESSION_COOKIE_SECURE = True  # 開発環境ではFalse、本番環境ではTrueに設定
+CSRF_COOKIE_SAMESITE = 'None'  # クロスサイトでのクッキー送信を許可
+SESSION_COOKIE_SAMESITE = 'None'  # クロスサイトでのクッキー送信を許可
 
 # 変更: CORS設定
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://yzksp-react.onrender.com",
+    "https://yzksp-app-frontend.onrender.com",
+    "http://localhost:3000",  # 開発環境用
 ]
 CORS_ALLOW_ALL_ORIGINS = False  # 特定のオリジンのみを許可する
 
 # 変更: CSRF信頼済みオリジン
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "https://yzksp-react.onrender.com",
+    "https://yzksp-app-frontend.onrender.com",
+    "http://localhost:3000",  # 開発環境用
 ]
 
 CORS_ALLOW_METHODS = [
