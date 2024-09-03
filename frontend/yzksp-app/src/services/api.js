@@ -1,7 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/';
+const ensureTrailingSlash = (url) => url.endsWith('/') ? url : `${url}/`;
+
+const API_URL = ensureTrailingSlash(process.env.REACT_APP_API_URL || 'http://localhost:8000/api/');
 console.log('API_URL:', API_URL);  // デバッグ用
 
 const getCSRFToken = () => {
